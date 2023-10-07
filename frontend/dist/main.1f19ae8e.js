@@ -144,19 +144,37 @@ function _playGame() {
         case 0:
           computerChoice = ["rock", "scissors", "paper"][Math.floor(Math.random() * 3)];
           result = determineWinner(playerChoice, computerChoice);
-          if (result === "win") {
-            playerScore++;
-            document.getElementById("score").textContent = "Din po\xE4ng: ".concat(playerScore);
-            document.getElementById("result").textContent = "Du valde ".concat(playerChoice, " och datorn valde ").concat(computerChoice, ". Du vinner!");
-          } else if (result === "lose") {
-            document.getElementById("result").textContent = "Du valde ".concat(playerChoice, " och datorn valde ").concat(computerChoice, ". Datorn vinner!");
-            // TODO: Skicka poäng till backend och starta om spelet
-            playerScore = 0;
-            document.getElementById("score").textContent = "Din po\xE4ng: ".concat(playerScore);
-          } else {
-            document.getElementById("result").textContent = "B\xE5da valde ".concat(playerChoice, ". Det \xE4r oavgjort!");
+          if (!(result === "win")) {
+            _context.next = 8;
+            break;
           }
-        case 3:
+          playerScore++;
+          document.getElementById("score").textContent = "Din po\xE4ng: ".concat(playerScore);
+          document.getElementById("result").textContent = "Du valde ".concat(playerChoice, " och datorn valde ").concat(computerChoice, ". Du vinner!");
+          _context.next = 18;
+          break;
+        case 8:
+          if (!(result === "lose")) {
+            _context.next = 17;
+            break;
+          }
+          document.getElementById("result").textContent = "Du valde ".concat(playerChoice, " och datorn valde ").concat(computerChoice, ". Datorn vinner!");
+
+          // Skicka poäng till backend och starta om spelet
+          if (!playerName) {
+            _context.next = 13;
+            break;
+          }
+          _context.next = 13;
+          return sendHighscore(playerName, playerScore);
+        case 13:
+          playerScore = 0;
+          document.getElementById("score").textContent = "Din po\xE4ng: ".concat(playerScore);
+          _context.next = 18;
+          break;
+        case 17:
+          document.getElementById("result").textContent = "B\xE5da valde ".concat(playerChoice, ". Det \xE4r oavgjort!");
+        case 18:
         case "end":
           return _context.stop();
       }
@@ -172,6 +190,89 @@ function determineWinner(playerChoice, computerChoice) {
     return "lose";
   }
 }
+function fetchHighscores() {
+  return _fetchHighscores.apply(this, arguments);
+}
+function _fetchHighscores() {
+  _fetchHighscores = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var response, highscores, highscoreList;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          _context2.prev = 0;
+          _context2.next = 3;
+          return fetch('http://localhost:3000/highscore');
+        case 3:
+          response = _context2.sent;
+          _context2.next = 6;
+          return response.json();
+        case 6:
+          highscores = _context2.sent;
+          highscoreList = document.getElementById('highscoreList');
+          highscoreList.innerHTML = '';
+          highscores.forEach(function (entry) {
+            var listItem = document.createElement('li');
+            listItem.textContent = "".concat(entry.name, ": ").concat(entry.score);
+            highscoreList.appendChild(listItem);
+          });
+          _context2.next = 15;
+          break;
+        case 12:
+          _context2.prev = 12;
+          _context2.t0 = _context2["catch"](0);
+          console.error("Error fetching highscores:", _context2.t0);
+        case 15:
+        case "end":
+          return _context2.stop();
+      }
+    }, _callee2, null, [[0, 12]]);
+  }));
+  return _fetchHighscores.apply(this, arguments);
+}
+function sendHighscore(_x2, _x3) {
+  return _sendHighscore.apply(this, arguments);
+} // Kalla på funktionen när sidan laddas
+function _sendHighscore() {
+  _sendHighscore = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(name, score) {
+    var response, data;
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          _context3.prev = 0;
+          _context3.next = 3;
+          return fetch('http://localhost:3000/highscore', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              name: name,
+              score: score
+            })
+          });
+        case 3:
+          response = _context3.sent;
+          _context3.next = 6;
+          return response.json();
+        case 6:
+          data = _context3.sent;
+          console.log(data.message);
+          fetchHighscores(); // Uppdatera highscore-listan
+          _context3.next = 14;
+          break;
+        case 11:
+          _context3.prev = 11;
+          _context3.t0 = _context3["catch"](0);
+          console.error("Error sending highscore:", _context3.t0);
+        case 14:
+        case "end":
+          return _context3.stop();
+      }
+    }, _callee3, null, [[0, 11]]);
+  }));
+  return _sendHighscore.apply(this, arguments);
+}
+fetchHighscores();
 },{}],"../../../../../Users/dkarn/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -197,7 +298,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51323" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52401" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
