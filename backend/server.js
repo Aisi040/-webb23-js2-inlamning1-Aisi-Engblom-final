@@ -1,7 +1,10 @@
 const express = require('express');
 const fs = require('fs');
+const cors = require('cors');  // <-- Lägg till detta här
 const app = express();
 const PORT = 3000;
+
+app.use(cors());  // <-- Lägg till detta här, innan andra middleware
 
 // Middleware för att hantera JSON-data
 app.use(express.json());
