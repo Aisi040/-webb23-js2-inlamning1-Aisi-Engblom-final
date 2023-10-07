@@ -1,7 +1,6 @@
 [
-    {"name": "Exempel", "score": 5},
-    {"name": "Exempel", "score": 4},
-    {"name": "Exempel", "score": 3},
-    {"name": "Exempel", "score": 2},
-    {"name": "Exempel", "score": 1}
+  {
+    "name": "Aisi",
+    "score": 10
+  }
 ]

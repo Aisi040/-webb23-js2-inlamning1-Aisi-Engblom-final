@@ -6,23 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sten, Sax, Påse Spel</title>
     <link rel="stylesheet" href="styles.css">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' ws: http: https: data:; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' http: https:;">
+
+
 </head>
 
 <body>
-    <h1>Sten, Sax, Påse</h1>
-    <p>Ange ditt namn:</p>
-    <input type="text" id="playerName" placeholder="Ditt namn">
-    <div id="gameArea">
-        <button id="rock">Sten</button>
-        <button id="scissors">Sax</button>
-        <button id="paper">Påse</button>
-        <p id="result"></p>
-        <p id="score">Din poäng: 0</p>
+    <div class="container">
+        <h1>Sten, Sax, Påse</h1>
+        <div id="user-input">
+            <label for="username">Namn: </label>
+            <input type="text" id="username" placeholder="Ange ditt namn">
+            <button id="start-game">Börja Spela</button>
+        </div>
+        <div id="game-board" hidden>
+            <p id="current-score">Poäng: 0</p>
+            <button class="choice" data-choice="sten">Sten</button>
+            <button class="choice" data-choice="sax">Sax</button>
+            <button class="choice" data-choice="påse">Påse</button>
+            <p id="result"></p>
+        </div>
+        <h2>Highscore</h2>
+        <ul id="highscore-list">
+            <!-- Highscores kommer att läggas till här -->
+        </ul>
     </div>
-    <h2>Highscore</h2>
-    <ul id="highscoreList"></ul>
     <script src="main.js"></script>
-
 </body>
 
 </html>
